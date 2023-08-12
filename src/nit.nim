@@ -32,7 +32,7 @@ proc diff*(fileName1: string, fileName2: string) =
   var numLines = max(lines1.len, lines2.len) ## Finds the file with the longest number of lines
   echo()  
 
-  ## 
+  ## Looping through each line for each file and comparing them
   for i in 0..numLines-1:
     var x = lines1[i]
     var y = lines2[i]
