@@ -34,17 +34,19 @@ proc diff*(fileName1: string, fileName2: string) =
 
   ## Looping through each line for each file and comparing them
   for i in 0..numLines-1:
-    var x = lines1[i]
-    var y = lines2[i]
-    x.removeSuffix('\r')
-    y.removeSuffix('\r')
+    var line1 = lines1[i]
+    var line2 = lines2[i]
+    line1.removeSuffix('\r')
+    line2.removeSuffix('\r')
 
-    if x == y:
-      echo "\"", $i, ". ", x, "\"\n"
-    if x != y:
+    ## Prints one line if both lines are the same
+    if line1 == line2:
+      echo "\"", $i, ". ", line1, "\"\n"
+    ## Prints both lines if both lines are different
+    if line1 != line2:
       echo "DIFF:"
-      echo "\"", $i, ". ", x, "\"\n"
-      echo "\"", $i, ". ", y, "\"\n"
+      echo "\"", $i, ". ", line1, "\"\n"
+      echo "\"", $i, ". ", line2, "\"\n"
     echo()
 
 when isMainModule:
@@ -59,19 +61,19 @@ when isMainModule:
 
 
   ## can't loop through 3 seqs at once, only 2
-  # for (x, y, z) in items(zip(lines1, lines2, lineNums)):
-  #   if x == y:
-  #     echo x, y
-  #   if x != y:
-  #     echo "DIFF:\n", x, "\n", y
+  # for (line1, line2, z) in items(zip(lines1, lines2, lineNums)):
+  #   if line1 == line2:
+  #     echo line1, line2
+  #   if line1 != line2:
+  #     echo "DIFF:\n", line1, "\n", line2
   #   echo()
   
   # var out1 = ""
   # var out2 = ""
-  # for (x, y) in zip(file, file2):
-  #   if x != y:
-  #     out1 = out1 & x
-  #     out2 = out2 & y
+  # for (line1, line2) in zip(file, file2):
+  #   if line1 != line2:
+  #     out1 = out1 & line1
+  #     out2 = out2 & line2
 
   # echo out1
   # echo out2
