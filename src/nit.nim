@@ -61,11 +61,13 @@ proc diff*(fileName1: string, fileName2: string) =
       elif line1 != line2:
         if line1 in lines2[lineIndex2..lines2.len-1]: ## here
           unchecked1.add(line1)
-          # echo "DIFF (Changed Line):"
-          # echo "  \"", line1, "\" to"
-          # echo "  \"", line2, "\"\n"
-          # lineIndex2 += 1
-          # break
+          if line2 in unchecked1:
+            echo "\"", line2, "\"\n"
+          else:
+            echo "DIFF (Added New Line):"
+            echo "+ \"", line2, "\"\n"
+          lineIndex2 += 1
+          break
         
         if line2 in lines1[x..lines1.len-1]: ## here
           unchecked2.add(line2)
