@@ -1,7 +1,7 @@
 # This is just an example to get you started. A typical binary package
 # import iterutils
 
-# import sequtils
+import sequtils
 import strutils
 import os
 
@@ -22,32 +22,76 @@ proc diff*(fileName1: string, fileName2: string) =
     echo "Error! Cannot read file: ", fileName2
     return
 
-  # echo file[file.len-1]
+  ## Function to remove the carriage return character from strings
+  proc removeCR(str: string): string =
+    var newStr = str
+    newStr.removeSuffix('\r')
+    return newStr
 
-  let lines1: seq[string] = file1.split('\n') ## Splits file string into a seq via newline character \n
-  let lines2: seq[string] = file2.split('\n') ## Splits file string into a seq via newline character \n
+  var lines1: seq[string] = file1.split('\n').map(removeCR) ## Splits file string into a seq via newline character \n and removes \r 
+  var lines2: seq[string] = file2.split('\n').map(removeCR) ## Splits file string into a seq via newline character \n and removes \r
 
+
+  var unchecked1: seq[string] = @[]
+  var unchecked2: seq[string] = @[]
   echo lines1
   echo lines2 
-  var numLines = max(lines1.len, lines2.len) ## Finds the file with the longest number of lines
-  echo()  
-
-  ## Looping through each line for each file and comparing them
-  for i in 0..numLines-1:
-    var line1 = lines1[i]
-    var line2 = lines2[i]
+  # var numLines = max(lines1.len, lines2.len) ## Finds the file with the longest number of lines
+  echo()
+  var lineIndex2 = 0
+  for x in 0..lines1.len - 1:
+    var line1 = lines1[x]
     line1.removeSuffix('\r')
+    if lineIndex2 == lines2.len:
+      if line1 in unchecked2:
+        echo "\"", line1, "\"\n"
+        unchecked2.del(unchecked2.find(line1))
+      else:
+        echo "DIFF (Removed Line):"
+        echo "- \"", line1, "\"\n"
+
+    while lineIndex2 != lines2.len:
+      var line2 = lines2[lineIndex2]
+      line2.removeSuffix('\r')
+      ## If the lines are the same then print just that line and compare with next line1
+      if line1 == line2 :
+        echo "\"", line1, "\"\n"
+        lineIndex2 += 1
+        break
+      elif line1 != line2:
+        if line1 in lines2[lineIndex2..lines2.len-1]: ## here
+          unchecked1.add(line1)
+          # echo "DIFF (Changed Line):"
+          # echo "  \"", line1, "\" to"
+          # echo "  \"", line2, "\"\n"
+          # lineIndex2 += 1
+          # break
+        
+        if line2 in lines1[x..lines1.len-1]: ## here
+          unchecked2.add(line2)
+          echo "DIFF (Removed Line):"
+          echo "- \"", line1, "\"\n"
+          lineIndex2 += 1
+          break
+        else:
+          echo "DIFF (Changed Line):"
+          echo "  \"", line1, "\" to"
+          echo "  \"", line2, "\"\n"
+
+          lineIndex2 += 1
+          break
+    
+  while lineIndex2 != lines2.len:
+    var line2 = lines2[lineIndex2]
     line2.removeSuffix('\r')
 
-    ## Prints one line if both lines are the same
-    if line1 == line2:
-      echo "\"", $i, ". ", line1, "\"\n"
-    ## Prints both lines if both lines are different
-    if line1 != line2:
-      echo "DIFF:"
-      echo "\"", $i, ". ", line1, "\"\n"
-      echo "\"", $i, ". ", line2, "\"\n"
-    echo()
+    if line2 in unchecked1:
+      echo "\"", line2, "\"\n"
+      unchecked1.del(unchecked1.find(line2))
+    else:
+      echo "DIFF (Added New Line):"
+      echo "+ \"", line2, "\"\n"
+    lineIndex2 += 1
 
 when isMainModule:
   echo()
