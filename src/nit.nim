@@ -29,8 +29,10 @@ proc diff*(fileName1: string, fileName2: string): string =
     newStr.removeSuffix('\r')
     return newStr
 
-  var lines1: seq[string] = file1.split('\n').map(removeCR) ## Splits file string into a seq via newline character \n and removes \r 
-  var lines2: seq[string] = file2.split('\n').map(removeCR) ## Splits file string into a seq via newline character \n and removes \r
+  var lines1: seq[string] = file1.split('\n').map(
+      removeCR) ## Splits file string into a seq via newline character \n and removes \r
+  var lines2: seq[string] = file2.split('\n').map(
+      removeCR) ## Splits file string into a seq via newline character \n and removes \r
 
 
   var unchecked1: seq[string] = @[]
@@ -57,7 +59,7 @@ proc diff*(fileName1: string, fileName2: string): string =
       var line2 = lines2[lineIndex2]
       line2.removeSuffix('\r')
       ## If the lines are the same then print just that line and compare with next line1
-      if line1 == line2 :
+      if line1 == line2:
         echo "\"", line1, "\"\n"
         lineIndex2 += 1
         output = output & "_"
@@ -81,7 +83,7 @@ proc diff*(fileName1: string, fileName2: string): string =
           # lineIndex2 += 1
           output = output & "_"
           break
-        
+
         if line2 in lines1[x..lines1.len-1]: ## here
           unchecked2.add(line2)
           echo "DIFF (Removed Line):"
