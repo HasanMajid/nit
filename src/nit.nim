@@ -82,22 +82,21 @@ proc diff*(fileName1: string, fileName2: string): string =
           unchecked2.del(unchecked2.find(line1))
           # lineIndex2 += 1
           output = output & "_"
-          break
-
-        if line2 in lines1[x..lines1.len-1]: ## here
+          
+        elif line2 in lines1[x..lines1.len-1]: ## here
           unchecked2.add(line2)
           echo "DIFF (Removed Line):"
           echo "- \"", line1, "\"\n"
           lineIndex2 += 1
           output = output & "-"
-          break
+
         else:
           echo "DIFF (Changed Line):"
           echo "  \"", line1, "\" to"
           echo "  \"", line2, "\"\n"
           lineIndex2 += 1
           output = output & "x"
-          break
+        break
 
   while lineIndex2 != lines2.len:
     var line2 = lines2[lineIndex2]
