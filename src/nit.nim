@@ -120,32 +120,3 @@ when isMainModule:
     if paramStr(1) == "diff":
       let result = diff(paramStr(2), paramStr(3))
       echo result
-
-
-
-
-
-
-  ## can't loop through 3 seqs at once, only 2
-  # for (line1, line2, z) in items(zip(lines1, lines2, lineNums)):
-  #   if line1 == line2:
-  #     echo line1, line2
-  #   if line1 != line2:
-  #     echo "DIFF:\n", line1, "\n", line2
-  #   echo()
-  
-  # var out1 = ""
-  # var out2 = ""
-  # for (line1, line2) in zip(file, file2):
-  #   if line1 != line2:
-  #     out1 = out1 & line1
-  #     out2 = out2 & line2
-
-  # echo out1
-  # echo out2
-
-
-
-      
-
-
